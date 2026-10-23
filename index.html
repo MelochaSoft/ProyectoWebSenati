@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportZone | Equípate para superar tus límites</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            neon: '#ccff00',      /* Verde Neón Eléctrico */
+                            dark: '#0d0f12',      /* Negro/Gris Ultra Oscuro */
+                            card: '#161920',      /* Fondo Tarjetas */
+                            accent: '#ff3366',    /* Rojo/Rosa Neón para ofertas */
+                            blue: '#00d2ff'       /* Azul Eléctrico */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Personalizaciones adicionales de scroll y efectos CSS */
+        body {
+            background-color: #0d0f12;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+        }
+        .text-stroke {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+        }
+        .glow-neon {
+            box-shadow: 0 0 20px rgba(204, 255, 0, 0.35);
+        }
+        .glow-neon-hover:hover {
+            box-shadow: 0 0 25px rgba(204, 255, 0, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #161920;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ccff00;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 flex flex-col min-h-screen selection:bg-brand-neon selection:text-black">
+
+    <!-- Top Banner Promocional -->
+    <div class="bg-brand-neon text-black text-xs sm:text-sm font-bold py-2 px-4 text-center font-display tracking-wide uppercase flex items-center justify-center gap-2">
+        <i class="fa-solid fa-bolt animate-bounce"></i>
+        <span>¡ENVÍO GRATIS EN COMPRAS MAYORES A $80! Úsalo con el código: <span class="underline">SPORTZONE2026</span></span>
+    </div>
+
+    <!-- 1. Encabezado y Navegación -->
+    <header class="sticky top-0 z-40 bg-brand-dark/90 backdrop-blur-md border-b border-gray-800 transition-all duration-300" id="main-header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-neon text-black rounded-lg flex items-center justify-center font-display font-black text-2xl transform -skew-x-12 group-hover:rotate-6 transition-transform">
+                    S
+                </div>
+                <span class="font-display font-black text-2xl tracking-italic uppercase italic text-white">
+                    SPORT<span class="text-brand-neon">ZONE</span>
+                </span>
+            </a>
+
+            <!-- Navegación Escritorio -->
+            <nav class="hidden lg:flex items-center space-x-8 font-display font-semibold text-sm uppercase tracking-wider text-gray-300">
+                <a href="#inicio" class="hover:text-brand-neon transition-colors">Inicio</a>
+                <a href="#categorias" class="hover:text-brand-neon transition-colors">Categorías</a>
+                <a href="#productos" class="hover:text-brand-neon transition-colors">Productos</a>
+                <a href="#oferta" class="hover:text-brand-neon transition-colors text-brand-accent flex items-center gap-1">
+                    <i class="fa-solid fa-fire text-xs"></i> Ofertas
+                </a>
+                <a href="#contacto" class="hover:text-brand-neon transition-colors">Contacto</a>
+            </nav>
+
+            <!-- Acciones / Iconos -->
+            <div class="flex items-center gap-4">
+                <!-- Buscador rápido -->
+                <div class="relative hidden sm:block w-48 lg:w-64">
+                    <input type="text" id="search-input" placeholder="Buscar productos..." 
+                           class="w-full bg-brand-card text-xs text-white placeholder-gray-400 rounded-full py-2 pl-4 pr-9 border border-gray-700 focus:outline-none focus:border-brand-neon transition-colors">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-400 text-xs"></i>
+                </div>
+
+                <!-- Botón Usuario -->
+                <button id="user-btn" onclick="toggleModal('modal-user')" class="p-2.5 text-gray-300 hover:text-brand-neon hover:bg-gray-800/50 rounded-full transition-colors" title="Mi Cuenta">
+                    <i class="fa-regular fa-user text-lg"></i>
+                </button>
+
+                <!-- Carrito de Compras -->
+                <button id="cart-btn" onclick="toggleCartDrawer()" class="relative p-2.5 text-gray-300 hover:text-brand-neon hover:bg-gray-800/50 rounded-full transition-colors" title="Carrito">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-neon text-black font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Menú Hamburguesa Móvil -->
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="lg:hidden p-2 text-gray-300 hover:text-brand-neon focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú desplegable Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-card border-b border-gray-800 px-6 py-4 space-y-3 font-display uppercase font-semibold text-sm">
+            <div class="mb-3">
+                <input type="text" id="search-input-mobile" placeholder="Buscar productos..." 
+                       class="w-full bg-brand-dark text-xs text-white placeholder-gray-400 rounded-full py-2 px-4 border border-gray-700 focus:outline-none focus:border-brand-neon">
+            </div>
+            <a href="#inicio" onclick="toggleMobileMenu()" class="block hover:text-brand-neon transition-colors py-1">Inicio</a>
+            <a href="#categorias" onclick="toggleMobileMenu()" class="block hover:text-brand-neon transition-colors py-1">Categorías</a>
+            <a href="#productos" onclick="toggleMobileMenu()" class="block hover:text-brand-neon transition-colors py-1">Productos</a>
+            <a href="#oferta" onclick="toggleMobileMenu()" class="block text-brand-accent hover:text-brand-neon transition-colors py-1">Ofertas Especiales</a>
+            <a href="#contacto" onclick="toggleMobileMenu()" class="block hover:text-brand-neon transition-colors py-1">Contacto</a>
+        </div>
+    </header>
+
+    <!-- 2. Sección Hero / Banner Principal -->
+    <section id="inicio" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-black">
+        <!-- Imagen de fondo con overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1920&q=80" 
+                 alt="Entrenamiento Deportivo" 
+                 class="w-full h-full object-cover object-center opacity-40 scale-105 transition-transform duration-1000" id="hero-bg">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+            <div class="max-w-2xl">
+                <span class="inline-block bg-brand-neon/10 border border-brand-neon/30 text-brand-neon text-xs sm:text-sm font-bold uppercase tracking-widest py-1.5 px-4 rounded-full mb-6 backdrop-blur-md">
+                    NUEVA COLECCIÓN 2026
+                </span>
+                <h1 class="font-display font-black text-4xl sm:text-6xl lg:text-7xl uppercase italic leading-none tracking-tight text-white mb-6">
+                    EQUÍPATE PARA <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-neon via-brand-blue to-white">SUPERAR TUS</span> <br>
+                    LÍMITES
+                </h1>
+                <p class="text-gray-300 text-base sm:text-lg mb-8 font-normal leading-relaxed max-w-xl">
+                    Encuentra la mejor indumentaria, calzado y accesorios de alto rendimiento diseñados para maximizar tu fuerza, velocidad y resistencia.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#productos" class="inline-flex items-center justify-center bg-brand-neon text-black font-display font-extrabold uppercase px-8 py-4 rounded-xl shadow-lg glow-neon glow-neon-hover transform hover:-translate-y-1 transition-all text-sm tracking-wider">
+                        Explorar Catálogo <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </a>
+                    <a href="#oferta" class="inline-flex items-center justify-center bg-transparent border-2 border-white/30 hover:border-brand-neon text-white hover:text-brand-neon font-display font-bold uppercase px-8 py-4 rounded-xl backdrop-blur-sm transition-all text-sm tracking-wider">
+                        Ver Ofertas
+                    </a>
+                </div>
+
+                <!-- Stats rápidos -->
+                <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-gray-800/80">
+                    <div>
+                        <p class="font-display font-black text-2xl sm:text-3xl text-brand-neon">+10K</p>
+                        <p class="text-xs text-gray-400 font-medium uppercase">Productos Pro</p>
+                    </div>
+                    <div>
+                        <p class="font-display font-black text-2xl sm:text-3xl text-white">24H</p>
+                        <p class="text-xs text-gray-400 font-medium uppercase">Envío Rápido</p>
+                    </div>
+                    <div>
+                        <p class="font-display font-black text-2xl sm:text-3xl text-brand-blue">4.9★</p>
+                        <p class="text-xs text-gray-400 font-medium uppercase">Calificación</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Sección de Categorías Populares -->
+    <section id="categorias" class="py-20 bg-brand-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-brand-neon font-display font-bold text-xs uppercase tracking-widest">DISCIPLINAS DEPORTIVAS</span>
+                    <h2 class="font-display font-black text-3xl sm:text-4xl uppercase italic text-white mt-1">Categorías Populares</h2>
+                </div>
+                <p class="text-gray-400 text-sm max-w-md mt-2 md:mt-0">
+                    Selecciona tu disciplina preferida y accede al mejor equipamiento especializado para cada nivel.
+                </p>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                
+                <!-- Card 1: Running -->
+                <div onclick="filterCategory('running')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-brand-neon/50 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=600&q=80" 
+                         alt="Running" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <div class="w-10 h-10 rounded-full bg-brand-neon/20 border border-brand-neon text-brand-neon flex items-center justify-center mb-3 group-hover:bg-brand-neon group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-person-running text-lg"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl uppercase italic text-white group-hover:text-brand-neon transition-colors">Running</h3>
+                        <p class="text-xs text-gray-400 mt-1">Zapatillas, Ropa y Gadgets</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Gym/Entrenamiento -->
+                <div onclick="filterCategory('gym')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-brand-neon/50 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80" 
+                         alt="Fitness" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <div class="w-10 h-10 rounded-full bg-brand-neon/20 border border-brand-neon text-brand-neon flex items-center justify-center mb-3 group-hover:bg-brand-neon group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-dumbbell text-lg"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl uppercase italic text-white group-hover:text-brand-neon transition-colors">Gym & Fitness</h3>
+                        <p class="text-xs text-gray-400 mt-1">Mancuernas, Correas y Ropa</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Fútbol -->
+                <div onclick="filterCategory('futbol')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-brand-neon/50 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80" 
+                         alt="Fútbol" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <div class="w-10 h-10 rounded-full bg-brand-neon/20 border border-brand-neon text-brand-neon flex items-center justify-center mb-3 group-hover:bg-brand-neon group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-futbol text-lg"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl uppercase italic text-white group-hover:text-brand-neon transition-colors">Fútbol</h3>
+                        <p class="text-xs text-gray-400 mt-1">Botines, Balones y Camisetas</p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Baloncesto -->
+                <div onclick="filterCategory('baloncesto')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-brand-neon/50 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=600&q=80" 
+                         alt="Baloncesto" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <div class="w-10 h-10 rounded-full bg-brand-neon/20 border border-brand-neon text-brand-neon flex items-center justify-center mb-3 group-hover:bg-brand-neon group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-basketball text-lg"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl uppercase italic text-white group-hover:text-brand-neon transition-colors">Baloncesto</h3>
+                        <p class="text-xs text-gray-400 mt-1">Zapatillas Sneakers y Canastas</p>
+                    </div>
+                </div>
+
+                <!-- Card 5: Ciclismo -->
+                <div onclick="filterCategory('ciclismo')" class="group relative h-80 rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-brand-neon/50 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80" 
+                         alt="Ciclismo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6">
+                        <div class="w-10 h-10 rounded-full bg-brand-neon/20 border border-brand-neon text-brand-neon flex items-center justify-center mb-3 group-hover:bg-brand-neon group-hover:text-black transition-colors">
+                            <i class="fa-solid fa-bicycle text-lg"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-xl uppercase italic text-white group-hover:text-brand-neon transition-colors">Ciclismo</h3>
+                        <p class="text-xs text-gray-400 mt-1">Cascos, Gafas y Accesorios</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Sección de Productos Destacados -->
+    <section id="productos" class="py-20 bg-[#0a0b0e] border-t border-b border-gray-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Encabezado & Filtros -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+                <div>
+                    <span class="text-brand-neon font-display font-bold text-xs uppercase tracking-widest">CATÁLOGO EXCLUSIVO</span>
+                    <h2 class="font-display font-black text-3xl sm:text-4xl uppercase italic text-white mt-1">Productos Destacados</h2>
+                </div>
+
+                <!-- Botones de Filtro -->
+                <div class="flex flex-wrap gap-2" id="filter-buttons">
+                    <button onclick="filterCategory('todos')" class="filter-btn active bg-brand-neon text-black font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all">Todos</button>
+                    <button onclick="filterCategory('running')" class="filter-btn bg-brand-card hover:bg-gray-800 text-gray-300 font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all">Running</button>
+                    <button onclick="filterCategory('gym')" class="filter-btn bg-brand-card hover:bg-gray-800 text-gray-300 font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all">Gym</button>
+                    <button onclick="filterCategory('futbol')" class="filter-btn bg-brand-card hover:bg-gray-800 text-gray-300 font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all">Fútbol</button>
+                    <button onclick="filterCategory('baloncesto')" class="filter-btn bg-brand-card hover:bg-gray-800 text-gray-300 font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all">Baloncesto</button>
+                    <button onclick="filterCategory('ciclismo')" class="filter-btn bg-brand-card hover:bg-gray-800 text-gray-300 font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all">Ciclismo</button>
+                </div>
+            </div>
+
+            <!-- Grid de Productos (Renderizado dinámico mediante JS) -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Se poblará dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Sección Promocional / Banner de Descuento -->
+    <section id="oferta" class="py-16 relative overflow-hidden bg-gradient-to-r from-red-950 via-brand-dark to-black border-y border-brand-accent/30">
+        <!-- Decoración neón -->
+        <div class="absolute -top-24 -left-24 w-96 h-96 bg-brand-accent/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-brand-neon/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-7">
+                    <span class="bg-brand-accent text-white font-display font-black text-xs uppercase tracking-widest py-1 px-3 rounded mb-4 inline-block">
+                        OFERTA DE TIEMPO LIMITADO
+                    </span>
+                    <h2 class="font-display font-black text-4xl sm:text-5xl uppercase italic text-white leading-tight mb-4">
+                        HASTA <span class="text-brand-accent">50% OFF</span> EN EQUIPAMIENTO DE ALTA COMPETENCIA
+                    </h2>
+                    <p class="text-gray-300 text-base mb-8 max-w-xl">
+                        Aprovecha el cambio de temporada. Calzado tecnológico, monitores de frecuencia y complementos nutricionales al precio más bajo del año.
+                    </p>
+
+                    <!-- Contador de tiempo -->
+                    <div class="flex gap-4 mb-8">
+                        <div class="bg-brand-card/90 border border-gray-800 rounded-xl p-3 text-center min-w-[70px]">
+                            <span id="timer-hours" class="font-display font-black text-2xl text-brand-neon block">08</span>
+                            <span class="text-[10px] text-gray-400 uppercase font-bold">Horas</span>
+                        </div>
+                        <div class="bg-brand-card/90 border border-gray-800 rounded-xl p-3 text-center min-w-[70px]">
+                            <span id="timer-minutes" class="font-display font-black text-2xl text-brand-neon block">42</span>
+                            <span class="text-[10px] text-gray-400 uppercase font-bold">Minutos</span>
+                        </div>
+                        <div class="bg-brand-card/90 border border-gray-800 rounded-xl p-3 text-center min-w-[70px]">
+                            <span id="timer-seconds" class="font-display font-black text-2xl text-brand-accent block">19</span>
+                            <span class="text-[10px] text-gray-400 uppercase font-bold">Segundos</span>
+                        </div>
+                    </div>
+
+                    <a href="#productos" onclick="filterCategory('todos')" class="inline-flex items-center bg-brand-accent hover:bg-red-600 text-white font-display font-extrabold uppercase px-8 py-4 rounded-xl shadow-lg transition-all text-sm tracking-wider">
+                        Reclamar Descuento <i class="fa-solid fa-fire ml-2"></i>
+                    </a>
+                </div>
+
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-sm">
+                        <div class="absolute inset-0 bg-brand-accent/20 rounded-2xl transform rotate-6 scale-95 blur-md"></div>
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" 
+                             alt="Zapatilla en oferta" 
+                             class="relative rounded-2xl border border-gray-700 shadow-2xl object-cover transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Pie de Página (Footer) -->
+    <footer id="contacto" class="bg-black text-gray-400 pt-16 pb-8 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-gray-800">
+                
+                <!-- Columna 1: Brand Info -->
+                <div class="lg:col-span-2 space-y-4">
+                    <a href="#" class="flex items-center gap-2">
+                        <div class="w-9 h-9 bg-brand-neon text-black rounded-lg flex items-center justify-center font-display font-black text-xl transform -skew-x-12">
+                            S
+                        </div>
+                        <span class="font-display font-black text-2xl uppercase italic text-white">
+                            SPORT<span class="text-brand-neon">ZONE</span>
+                        </span>
+                    </a>
+                    <p class="text-sm text-gray-400 leading-relaxed pr-6">
+                        Somos la tienda deportiva líder en innovación y rendimiento. Nos apasiona impulsar tus metas con marcas de prestigio mundial e indumentaria de vanguardia.
+                    </p>
+                    
+                    <!-- Redes Sociales -->
+                    <div class="flex gap-3 pt-2">
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card hover:bg-brand-neon hover:text-black flex items-center justify-center text-white transition-colors">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card hover:bg-brand-neon hover:text-black flex items-center justify-center text-white transition-colors">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card hover:bg-brand-neon hover:text-black flex items-center justify-center text-white transition-colors">
+                            <i class="fa-brands fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-brand-card hover:bg-brand-neon hover:text-black flex items-center justify-center text-white transition-colors">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Enlaces Rápidos -->
+                <div>
+                    <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">Navegación</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#inicio" class="hover:text-brand-neon transition-colors">Inicio</a></li>
+                        <li><a href="#categorias" class="hover:text-brand-neon transition-colors">Disciplinas</a></li>
+                        <li><a href="#productos" class="hover:text-brand-neon transition-colors">Catálogo Completo</a></li>
+                        <li><a href="#oferta" class="hover:text-brand-neon transition-colors">Promociones</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Blog Deportivo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Ayuda y Soporte -->
+                <div>
+                    <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">Soporte</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Preguntas Frecuentes</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Políticas de Envío</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Devoluciones</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Guía de Tallas</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Centro de Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Newsletter -->
+                <div>
+                    <h4 class="font-display font-bold text-white text-sm uppercase tracking-wider mb-4">Newsletter</h4>
+                    <p class="text-xs text-gray-400 mb-4">Suscríbete para recibir lanzamientos exclusivos y un 10% OFF adicional.</p>
+                    <form onsubmit="handleNewsletter(event)" class="space-y-2">
+                        <input type="email" required placeholder="Tu correo electrónico" 
+                               class="w-full bg-brand-card text-xs text-white placeholder-gray-500 rounded-lg py-3 px-3 border border-gray-800 focus:outline-none focus:border-brand-neon">
+                        <button type="submit" class="w-full bg-brand-neon text-black font-display font-extrabold text-xs uppercase py-3 rounded-lg hover:bg-white transition-colors">
+                            Suscribirme
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+                <p>&copy; 2026 SportZone Inc. Todos los derechos reservados.</p>
+                
+                <!-- Métodos de pago -->
+                <div class="flex items-center gap-4 text-xl text-gray-400">
+                    <i class="fa-brands fa-cc-visa hover:text-white transition-colors" title="Visa"></i>
+                    <i class="fa-brands fa-cc-mastercard hover:text-white transition-colors" title="Mastercard"></i>
+                    <i class="fa-brands fa-cc-paypal hover:text-white transition-colors" title="PayPal"></i>
+                    <i class="fa-brands fa-cc-apple-pay hover:text-white transition-colors" title="Apple Pay"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- DRAWER / PANEL LATERAL CARRITO DE COMPRAS -->
+    <div id="cart-drawer-overlay" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    
+    <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-brand-card z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Header del Carrito -->
+        <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+            <h3 class="font-display font-bold text-lg uppercase italic text-white flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping text-brand-neon"></i> Tu Carrito
+            </h3>
+            <button onclick="toggleCartDrawer()" class="text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Items Lista -->
+        <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
+            <!-- Items agregados JS -->
+        </div>
+
+        <!-- Footer del Carrito -->
+        <div class="p-5 border-t border-gray-800 bg-brand-dark/50">
+            <div class="flex items-center justify-between mb-2 text-sm text-gray-400">
+                <span>Subtotal</span>
+                <span id="cart-subtotal" class="font-bold text-white">$0.00</span>
+            </div>
+            <div class="flex items-center justify-between mb-4 text-sm text-gray-400">
+                <span>Envío</span>
+                <span class="text-brand-neon font-semibold">Calculado al pagar</span>
+            </div>
+            <div class="flex items-center justify-between mb-6 text-lg font-bold text-white border-t border-gray-800 pt-3">
+                <span>Total Est.</span>
+                <span id="cart-total" class="text-brand-neon font-display">$0.00</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-brand-neon text-black font-display font-extrabold uppercase py-4 rounded-xl shadow-lg glow-neon hover:bg-white transition-colors text-sm">
+                Finalizar Compra
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE USUARIO / LOGIN -->
+    <div id="modal-user" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-brand-card border border-gray-800 rounded-2xl max-w-md w-full p-6 relative">
+            <button onclick="toggleModal('modal-user')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h3 class="font-display font-bold text-2xl uppercase italic text-white mb-2">Iniciar Sesión</h3>
+            <p class="text-xs text-gray-400 mb-6">Accede a tu cuenta para gestionar tus pedidos y ofertas.</p>
+            
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Correo Electrónico</label>
+                    <input type="email" required placeholder="atleta@sportzone.com" 
+                           class="w-full bg-brand-dark text-sm text-white rounded-lg py-2.5 px-3 border border-gray-700 focus:outline-none focus:border-brand-neon">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase font-bold text-gray-300 mb-1">Contraseña</label>
+                    <input type="password" required placeholder="••••••••" 
+                           class="w-full bg-brand-dark text-sm text-white rounded-lg py-2.5 px-3 border border-gray-700 focus:outline-none focus:border-brand-neon">
+                </div>
+                <button type="submit" class="w-full bg-brand-neon text-black font-display font-extrabold text-sm uppercase py-3 rounded-lg hover:bg-white transition-colors">
+                    Entrar a mi Cuenta
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL VISTA RÁPIDA DE PRODUCTO -->
+    <div id="modal-product" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-brand-card border border-gray-800 rounded-2xl max-w-2xl w-full p-6 relative overflow-hidden">
+            <button onclick="toggleModal('modal-product')" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="modal-product-content" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Se llena con JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-brand-neon text-black font-display font-bold text-sm px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 z-50">
+        <i class="fa-solid fa-circle-check text-lg"></i>
+        <span id="toast-message">Producto añadido al carrito</span>
+    </div>
+
+    <!-- JAVASCRIPT DE LÓGICA E INTERACTIVIDAD -->
+    <script>
+        // Array de datos de productos
+        const products = [
+            {
+                id: 1,
+                name: 'Nike Vaporfly Pro 3.0',
+                category: 'running',
+                categoryLabel: 'Running',
+                price: 189.99,
+                oldPrice: 220.00,
+                rating: 5,
+                reviews: 48,
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80',
+                badge: 'MÁS VENDIDO',
+                desc: 'Zapatillas de maratón ultra ligeras con placa de fibra de carbono para máximo retorno de energía.'
+            },
+            {
+                id: 2,
+                name: 'Balón Oficial UEFA Pro',
+                category: 'futbol',
+                categoryLabel: 'Fútbol',
+                price: 45.00,
+                oldPrice: 60.00,
+                rating: 4.8,
+                reviews: 32,
+                image: 'https://images.unsplash.com/photo-1614632537190-23e4146777db?auto=format&fit=crop&w=600&q=80',
+                badge: 'OFICIAL',
+                desc: 'Balón cosido térmicamente resistente a todo tipo de clima y máxima estabilidad de vuelo.'
+            },
+            {
+                id: 3,
+                name: 'Mancuernas Hex Neopreno 10kg',
+                category: 'gym',
+                categoryLabel: 'Gym',
+                price: 59.99,
+                oldPrice: 75.00,
+                rating: 4.7,
+                reviews: 19,
+                image: 'https://images.unsplash.com/photo-1638536532686-d610adfc8e5c?auto=format&fit=crop&w=600&q=80',
+                badge: 'OFERTA',
+                desc: 'Par de mancuernas ergonómicas antiderrapantes ideales para entrenamientos de fuerza en casa o gimnasio.'
+            },
+            {
+                id: 4,
+                name: 'Casco Ciclismo Aerodinámico',
+                category: 'ciclismo',
+                categoryLabel: 'Ciclismo',
+                price: 89.00,
+                oldPrice: 110.00,
+                rating: 4.9,
+                reviews: 55,
+                image: 'https://images.unsplash.com/photo-1559348349-86f1f65817fe?auto=format&fit=crop&w=600&q=80',
+                badge: 'NUEVO',
+                desc: 'Casco ultraligero con tecnología MIPS y 18 canales de ventilación óptima.'
+            },
+            {
+                id: 5,
+                name: 'Zapatillas Air Jordan Bounce',
+                category: 'baloncesto',
+                categoryLabel: 'Baloncesto',
+                price: 159.99,
+                oldPrice: 190.00,
+                rating: 5,
+                reviews: 73,
+                image: 'https://images.unsplash.com/photo-1579338559194-a162d19bf842?auto=format&fit=crop&w=600&q=80',
+                badge: 'TOP',
+                desc: 'Suela de agarre multidireccional con amortiguación de aire para saltos explosivos.'
+            },
+            {
+                id: 6,
+                name: 'Camiseta Compresión Fit',
+                category: 'gym',
+                categoryLabel: 'Gym',
+                price: 29.99,
+                oldPrice: 39.99,
+                rating: 4.6,
+                reviews: 28,
+                image: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=600&q=80',
+                badge: 'POPULAR',
+                desc: 'Tejido transpirable Dry-Fit que mantiene el cuerpo seco y estimula la circulación muscular.'
+            },
+            {
+                id: 7,
+                name: 'Guantes de Portero Pro Grip',
+                category: 'futbol',
+                categoryLabel: 'Fútbol',
+                price: 38.50,
+                oldPrice: 50.00,
+                rating: 4.8,
+                reviews: 14,
+                image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=600&q=80',
+                badge: null,
+                desc: 'Látex de alto agarre con varillas de protección para prevenir lesiones en los dedos.'
+            },
+            {
+                id: 8,
+                name: 'Smartwatch Sport GPS Pro',
+                category: 'running',
+                categoryLabel: 'Running',
+                price: 129.00,
+                oldPrice: 160.00,
+                rating: 4.9,
+                reviews: 91,
+                image: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=600&q=80',
+                badge: 'TECNOLOGÍA',
+                desc: 'Monitoreo cardíaco en tiempo real, resistencia al agua 50m y métricas avanzadas de entrenamiento.'
+            }
+        ];
+
+        // Estado del Carrito
+        let cart = [];
+
+        // Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts(products);
+            startCountdown();
+
+            // Búsqueda en tiempo real
+            document.getElementById('search-input').addEventListener('input', handleSearch);
+            document.getElementById('search-input-mobile').addEventListener('input', handleSearch);
+        });
+
+        // Renderizado de productos
+        function renderProducts(items) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-400">
+                        <i class="fa-solid fa-box-open text-4xl mb-3 text-gray-600"></i>
+                        <p class="font-display font-bold">No se encontraron productos en esta categoría.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            items.forEach(product => {
+                const stars = Array(5).fill(0).map((_, i) => 
+                    `<i class="fa-solid fa-star ${i < Math.floor(product.rating) ? 'text-yellow-400' : 'text-gray-600'}"></i>`
+                ).join('');
+
+                const productCard = document.createElement('div');
+                productCard.className = 'group bg-brand-card rounded-2xl border border-gray-800/80 hover:border-brand-neon/60 transition-all duration-300 flex flex-col overflow-hidden';
+                productCard.innerHTML = `
+                    <div class="relative h-60 bg-gray-900 overflow-hidden cursor-pointer" onclick="openProductModal(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        ${product.badge ? `<span class="absolute top-3 left-3 bg-brand-neon text-black font-display font-extrabold text-[10px] px-2.5 py-1 rounded-md uppercase tracking-wider">${product.badge}</span>` : ''}
+                        
+                        <button onclick="event.stopPropagation(); openProductModal(${product.id})" class="absolute bottom-3 right-3 bg-black/70 hover:bg-brand-neon hover:text-black text-white p-2.5 rounded-full backdrop-blur-md transition-colors opacity-0 group-hover:opacity-100">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase text-brand-neon tracking-widest">${product.categoryLabel}</span>
+                            <h3 onclick="openProductModal(${product.id})" class="font-display font-bold text-base text-white hover:text-brand-neon transition-colors mt-1 cursor-pointer line-clamp-1">${product.name}</h3>
+                            
+                            <div class="flex items-center gap-1.5 text-xs my-2">
+                                <div class="flex text-[10px]">${stars}</div>
+                                <span class="text-gray-400 text-[11px]">(${product.reviews})</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-gray-800/80 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-gray-500 line-through">$${product.oldPrice.toFixed(2)}</span>
+                                <p class="font-display font-black text-lg text-white">$${product.price.toFixed(2)}</p>
+                            </div>
+                            <button onclick="addToCart(${product.id})" class="bg-brand-card border border-brand-neon/40 hover:bg-brand-neon hover:text-black text-brand-neon p-2.5 rounded-xl transition-all duration-300 font-bold flex items-center gap-1 text-xs">
+                                <i class="fa-solid fa-cart-plus text-sm"></i>
+                                <span class="hidden sm:inline">Añadir</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(productCard);
+            });
+        }
+
+        // Filtrado por Categoría
+        function filterCategory(category) {
+            // Actualizar estado de botones
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.innerText.toLowerCase() === category.toLowerCase() || (category === 'todos' && btn.innerText === 'TODOS')) {
+                    btn.className = 'filter-btn active bg-brand-neon text-black font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all';
+                } else {
+                    btn.className = 'filter-btn bg-brand-card hover:bg-gray-800 text-gray-300 font-display font-bold text-xs uppercase px-4 py-2 rounded-full transition-all';
+                }
+            });
+
+            if (category === 'todos') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        // Búsqueda en tiempo real
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.categoryLabel.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        }
+
+        // Carrito de compras: Funciones
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`"${product.name}" agregado al carrito`);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function changeQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartSubtotal = document.getElementById('cart-subtotal');
+            const cartTotal = document.getElementById('cart-total');
+
+            // Actualizar badge contador
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            cartCount.innerText = totalItems;
+
+            // Renderizar lista de productos
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fa-solid fa-cart-arrow-down text-4xl mb-3 text-gray-700"></i>
+                        <p class="font-display font-bold">Tu carrito está vacío</p>
+                        <p class="text-xs mt-1">¡Añade equipamiento para comenzar!</p>
+                    </div>
+                `;
+                cartSubtotal.innerText = '$0.00';
+                cartTotal.innerText = '$0.00';
+                return;
+            }
+
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                const cartItemEl = document.createElement('div');
+                cartItemEl.className = 'flex items-center gap-3 bg-brand-dark p-3 rounded-xl border border-gray-800';
+                cartItemEl.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-display font-bold text-xs text-white line-clamp-1">${item.name}</h4>
+                        <p class="text-xs text-brand-neon font-bold mt-1">$${item.price.toFixed(2)}</p>
+                        
+                        <div class="flex items-center gap-2 mt-2">
+                            <button onclick="changeQuantity(${item.id}, -1)" class="w-5 h-5 bg-gray-800 text-white rounded hover:bg-brand-neon hover:text-black flex items-center justify-center text-xs font-bold">-</button>
+                            <span class="text-xs font-bold text-white">${item.quantity}</span>
+                            <button onclick="changeQuantity(${item.id}, 1)" class="w-5 h-5 bg-gray-800 text-white rounded hover:bg-brand-neon hover:text-black flex items-center justify-center text-xs font-bold">+</button>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-red-500 p-1">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                `;
+                cartItemsContainer.appendChild(cartItemEl);
+            });
+
+            cartSubtotal.innerText = `$${total.toFixed(2)}`;
+            cartTotal.innerText = `$${total.toFixed(2)}`;
+        }
+
+        // Toggles y Modales
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('cart-drawer-overlay');
+            
+            drawer.classList.toggle('translate-x-full');
+            overlay.classList.toggle('opacity-0');
+            overlay.classList.toggle('pointer-events-none');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+
+        function openProductModal(productId) {
+            const product = products.find(p => p.id === productId);
+            const content = document.getElementById('modal-product-content');
+
+            content.innerHTML = `
+                <div class="rounded-xl overflow-hidden bg-gray-900 h-64 md:h-full">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-bold uppercase text-brand-neon tracking-widest">${product.categoryLabel}</span>
+                        <h3 class="font-display font-black text-2xl text-white mt-1">${product.name}</h3>
+                        <p class="text-gray-400 text-xs my-3 leading-relaxed">${product.desc}</p>
+                        
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="font-display font-black text-2xl text-white">$${product.price.toFixed(2)}</span>
+                            <span class="text-xs text-gray-500 line-through">$${product.oldPrice.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button onclick="addToCart(${product.id}); toggleModal('modal-product');" class="w-full bg-brand-neon text-black font-display font-extrabold uppercase py-3 rounded-xl hover:bg-white transition-colors text-sm">
+                            Añadir al Carrito
+                        </button>
+                    </div>
+                </div>
+            `;
+            toggleModal('modal-product');
+        }
+
+        // Notificación Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // Temporizador de ofertas
+        function startCountdown() {
+            let hours = 8, minutes = 42, seconds = 19;
+            setInterval(() => {
+                seconds--;
+                if (seconds < 0) { seconds = 59; minutes--; }
+                if (minutes < 0) { minutes = 59; hours--; }
+                if (hours < 0) { hours = 24; }
+
+                document.getElementById('timer-hours').innerText = hours < 10 ? '0' + hours : hours;
+                document.getElementById('timer-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById('timer-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+            }, 1000);
+        }
+
+        // Manejadores de Formularios
+        function handleNewsletter(e) {
+            e.preventDefault();
+            showToast('¡Gracias por suscribirte al boletín!');
+            e.target.reset();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            toggleModal('modal-user');
+            showToast('¡Sesión iniciada con éxito!');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast('Tu carrito está vacío');
+                return;
+            }
+            showToast('¡Procesando pedido de compra!');
+            cart = [];
+            updateCartUI();
+            toggleCartDrawer();
+        }
+    </script>
+</body>
+</html>
